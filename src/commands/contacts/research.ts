@@ -74,17 +74,17 @@ export const contactsResearchCommand: CommandDefinition = {
     const body: Record<string, unknown> = {};
 
     if (input.searchResultIds?.length) {
-      body['searchResultIds[]'] = input.searchResultIds;
+      body.searchResultIds = input.searchResultIds;
     }
 
     if (input.contacts?.length) {
-      body['contacts[]'] = input.contacts;
+      body.contacts = input.contacts;
     }
 
     if (input.linkedInUrls?.length) {
       // LinkedIn URLs map to contacts with linkedInProfileUrl
-      const existing = (body['contacts[]'] as any[]) ?? [];
-      body['contacts[]'] = [
+      const existing = (body.contacts as any[]) ?? [];
+      body.contacts = [
         ...existing,
         ...input.linkedInUrls.map((url: string) => ({ linkedInProfileUrl: url })),
       ];
@@ -94,7 +94,7 @@ export const contactsResearchCommand: CommandDefinition = {
       body.isJobChange = true;
     }
 
-    if (!body['searchResultIds[]'] && !body['contacts[]']) {
+    if (!body.searchResultIds && !body.contacts) {
       throw new Error(
         'Provide --search-result-ids, --contacts, or --linkedin-urls to research',
       );

@@ -14,7 +14,7 @@ const BASE_URL = 'https://api.seamless.ai/api/client/v1';
 const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT = 30_000;
 const WRITE_TIMEOUT = 20_000;
-const VERSION = '0.1.0';
+const VERSION = '0.1.3';
 
 interface ClientOptions {
   apiKey: string;

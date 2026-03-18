@@ -6,7 +6,7 @@ const program = new Command();
 program
   .name('seamless')
   .description('CLI and MCP server for the Seamless.ai B2B prospecting platform')
-  .version('0.1.0')
+  .version('0.1.3')
   .option('--api-key <key>', 'Seamless.ai API key (overrides SEAMLESS_API_KEY env var and stored config)')
   .option('--output <format>', 'Output format: json (default) or pretty', 'json')
   .option('--pretty', 'Shorthand for --output pretty')

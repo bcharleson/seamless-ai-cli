@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { CommandDefinition } from '../../core/types.js';
+import { expandState } from '../../core/states.js';
 
 // Comma-separated string → string array (used throughout search filters)
 const csvToArray = z
@@ -113,22 +114,22 @@ export const contactsSearchCommand: CommandDefinition = {
   handler: async (input, client) => {
     const body: Record<string, unknown> = {};
 
-    // Arrays
-    if (input.companyName?.length) body['companyName[]'] = input.companyName;
-    if (input.companyDomain?.length) body['companyDomain[]'] = input.companyDomain;
-    if (input.contactState?.length) body['contactState[]'] = input.contactState;
-    if (input.contactCountry?.length) body['contactCountry[]'] = input.contactCountry;
-    if (input.contactZipCode?.length) body['contactZipCode[]'] = input.contactZipCode;
-    if (input.fullName?.length) body['fullName[]'] = input.fullName;
-    if (input.jobTitle?.length) body['jobTitle[]'] = input.jobTitle;
-    if (input.department?.length) body['department[]'] = input.department;
-    if (input.seniority?.length) body['seniority[]'] = input.seniority;
-    if (input.contactKeyword?.length) body['contactKeyword[]'] = input.contactKeyword;
-    if (input.industry?.length) body['industry[]'] = input.industry;
-    if (input.companyFoundedOn?.length) body['companyFoundedOn[]'] = input.companyFoundedOn;
-    if (input.companySize?.length) body['companySize[]'] = input.companySize;
-    if (input.companyRevenue?.length) body['companyRevenue[]'] = input.companyRevenue;
-    if (input.technologies?.length) body['technologies[]'] = input.technologies;
+    // Arrays — plain JSON keys (no brackets), API accepts array values directly
+    if (input.companyName?.length) body.companyName = input.companyName;
+    if (input.companyDomain?.length) body.companyDomain = input.companyDomain;
+    if (input.contactState?.length) body.contactState = input.contactState.map(expandState);
+    if (input.contactCountry?.length) body.contactCountry = input.contactCountry;
+    if (input.contactZipCode?.length) body.contactZipCode = input.contactZipCode;
+    if (input.fullName?.length) body.fullName = input.fullName;
+    if (input.jobTitle?.length) body.jobTitle = input.jobTitle;
+    if (input.department?.length) body.department = input.department;
+    if (input.seniority?.length) body.seniority = input.seniority;
+    if (input.contactKeyword?.length) body.contactKeyword = input.contactKeyword;
+    if (input.industry?.length) body.industry = input.industry;
+    if (input.companyFoundedOn?.length) body.companyFoundedOn = input.companyFoundedOn;
+    if (input.companySize?.length) body.companySize = input.companySize;
+    if (input.companyRevenue?.length) body.companyRevenue = input.companyRevenue;
+    if (input.technologies?.length) body.technologies = input.technologies;
 
     // Scalars
     if (input.companyNameSearchType) body.companyNameSearchType = input.companyNameSearchType;

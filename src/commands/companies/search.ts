@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { CommandDefinition } from '../../core/types.js';
+import { expandState } from '../../core/states.js';
 
 const csvToArray = z
   .string()
@@ -88,18 +89,18 @@ export const companiesSearchCommand: CommandDefinition = {
   handler: async (input, client) => {
     const body: Record<string, unknown> = {};
 
-    // Arrays
-    if (input.companyName?.length) body['companyName[]'] = input.companyName;
-    if (input.companyDomain?.length) body['companyDomain[]'] = input.companyDomain;
-    if (input.companyState?.length) body['companyState[]'] = input.companyState;
-    if (input.companyCountry?.length) body['companyCountry[]'] = input.companyCountry;
-    if (input.companyZipCode?.length) body['companyZipCode[]'] = input.companyZipCode;
-    if (input.industry?.length) body['industry[]'] = input.industry;
-    if (input.companyKeyword?.length) body['companyKeyword[]'] = input.companyKeyword;
-    if (input.companySize?.length) body['companySize[]'] = input.companySize;
-    if (input.companyRevenue?.length) body['companyRevenue[]'] = input.companyRevenue;
-    if (input.foundedOn?.length) body['foundedOn[]'] = input.foundedOn;
-    if (input.technologies?.length) body['technologies[]'] = input.technologies;
+    // Arrays — plain JSON keys (no brackets), API accepts array values directly
+    if (input.companyName?.length) body.companyName = input.companyName;
+    if (input.companyDomain?.length) body.companyDomain = input.companyDomain;
+    if (input.companyState?.length) body.companyState = input.companyState.map(expandState);
+    if (input.companyCountry?.length) body.companyCountry = input.companyCountry;
+    if (input.companyZipCode?.length) body.companyZipCode = input.companyZipCode;
+    if (input.industry?.length) body.industry = input.industry;
+    if (input.companyKeyword?.length) body.companyKeyword = input.companyKeyword;
+    if (input.companySize?.length) body.companySize = input.companySize;
+    if (input.companyRevenue?.length) body.companyRevenue = input.companyRevenue;
+    if (input.foundedOn?.length) body.foundedOn = input.foundedOn;
+    if (input.technologies?.length) body.technologies = input.technologies;
 
     // Scalars
     if (input.companyNameSearchType) body.companyNameSearchType = input.companyNameSearchType;
