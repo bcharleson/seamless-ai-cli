@@ -61,7 +61,7 @@ export const companiesSearchCommand: CommandDefinition = {
       { field: 'companyDomain', flags: '--company-domain <domains>', description: 'Domain(s), comma-separated (e.g. stripe.com) [max 100]' },
 
       // Location
-      { field: 'companyState', flags: '--company-state <states>', description: 'US state(s), comma-separated [max 10]' },
+      { field: 'companyState', flags: '--company-state <states>', description: 'US state(s), full name comma-separated (e.g. Nevada,Texas — NOT NV,TX) [max 10]' },
       { field: 'companyCountry', flags: '--company-country <countries>', description: 'Country/countries, comma-separated [max 10]' },
       { field: 'companyZipCode', flags: '--company-zip-code <zips>', description: 'Company zip/postal code(s), comma-separated [max 10]' },
 

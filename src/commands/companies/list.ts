@@ -6,11 +6,11 @@ export const companiesListCommand: CommandDefinition = {
   group: 'companies',
   subcommand: 'list',
   description:
-    'List companies that have been researched and saved to your Seamless.ai org. Supports date range filtering and pagination.',
+    'List companies researched and saved to your Seamless.ai org. Dates are REQUIRED by the API and must span ≤30 days. Defaults to the last 30 days if omitted.',
   examples: [
     'seamless companies list',
     'seamless companies list --limit 100 --page 2',
-    'seamless companies list --start-date 2024-01-01 --end-date 2024-12-31',
+    'seamless companies list --start-date 2024-11-01 --end-date 2024-11-30',
     'seamless companies list --fields "name,domain,staffCount,annualRevenue,industries"',
     'seamless companies list --pretty',
   ],
@@ -24,8 +24,8 @@ export const companiesListCommand: CommandDefinition = {
     options: [
       { field: 'page', flags: '-p, --page <n>', description: 'Page number (default 1)' },
       { field: 'limit', flags: '-l, --limit <n>', description: 'Results per page (1-500, default 50)' },
-      { field: 'startDate', flags: '--start-date <date>', description: 'Filter by research date start (ISO8601)' },
-      { field: 'endDate', flags: '--end-date <date>', description: 'Filter by research date end (ISO8601)' },
+      { field: 'startDate', flags: '--start-date <date>', description: 'Range start YYYY-MM-DD (default: 30 days ago). Range must be ≤30 days.' },
+      { field: 'endDate', flags: '--end-date <date>', description: 'Range end YYYY-MM-DD (default: today). Range must be ≤30 days.' },
     ],
   },
   endpoint: { method: 'GET', path: '/companies' },
@@ -36,11 +36,23 @@ export const companiesListCommand: CommandDefinition = {
     endDate: 'query',
   },
   handler: async (input, client) => {
-    const query: Record<string, any> = {};
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    const endDate = input.endDate ?? today.toISOString().split('T')[0];
+    const startDate = input.startDate ?? thirtyDaysAgo.toISOString().split('T')[0];
+
+    const diffDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / 86_400_000;
+    if (diffDays > 30) {
+      throw new Error(
+        `Date range must be ≤30 days (got ${Math.ceil(diffDays)} days). Seamless.ai requires this on the list endpoint.`,
+      );
+    }
+
+    const query: Record<string, any> = { startDate, endDate };
     if (input.page !== undefined) query.page = input.page;
     if (input.limit !== undefined) query.limit = input.limit;
-    if (input.startDate) query.startDate = input.startDate;
-    if (input.endDate) query.endDate = input.endDate;
 
     return client.get('/companies', query);
   },

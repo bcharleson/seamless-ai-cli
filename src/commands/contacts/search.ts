@@ -73,7 +73,7 @@ export const contactsSearchCommand: CommandDefinition = {
       { field: 'companyDomain', flags: '--company-domain <domains>', description: 'Domain(s), comma-separated (e.g. stripe.com) [max 100]' },
 
       // Location
-      { field: 'contactState', flags: '--contact-state <states>', description: 'Contact US state(s), comma-separated [max 10]' },
+      { field: 'contactState', flags: '--contact-state <states>', description: 'Contact US state(s), full name comma-separated (e.g. Nevada,Texas — NOT NV,TX) [max 10]' },
       { field: 'contactCountry', flags: '--contact-country <countries>', description: 'Contact country/countries, comma-separated [max 10]' },
       { field: 'contactZipCode', flags: '--contact-zip-code <zips>', description: 'Contact zip/postal code(s), comma-separated [max 10]' },
       { field: 'locationType', flags: '--location-type <type>', description: 'Location match scope: bothOR | bothAND | company | contact' },
