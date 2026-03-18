@@ -10,7 +10,7 @@ import {
 } from './errors.js';
 
 // Seamless.ai rate limit: ~100 req / 60s per endpoint
-const BASE_URL = 'https://api.seamless.ai';
+const BASE_URL = 'https://api.seamless.ai/api/client/v1';
 const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT = 30_000;
 const WRITE_TIMEOUT = 20_000;
